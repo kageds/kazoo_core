@@ -68,30 +68,22 @@
 
 -endif.
 
--define(SUP_LOG_DEBUG(F, A),
-        begin
-            lager:debug(F, A),
-            io:format(F ++ "\n", A)
-        end
-       ).
--define(SUP_LOG_INFO(F, A),
-        begin
-            lager:info(F, A),
-            io:format(F ++ "\n", A)
-        end
-       ).
--define(SUP_LOG_WARNING(F, A),
-        begin
-            lager:warning(F, A),
-            io:format(F ++ "\n", A)
-        end
-       ).
--define(SUP_LOG_ERROR(F, A),
-        begin
-            lager:error(F, A),
-            io:format(F ++ "\n", A)
-        end
-       ).
+-define(SUP_LOG_DEBUG(F, A), begin
+    lager:debug(F, A),
+    io:format(F ++ "\n", A)
+end).
+-define(SUP_LOG_INFO(F, A), begin
+    lager:info(F, A),
+    io:format(F ++ "\n", A)
+end).
+-define(SUP_LOG_WARNING(F, A), begin
+    lager:warning(F, A),
+    io:format(F ++ "\n", A)
+end).
+-define(SUP_LOG_ERROR(F, A), begin
+    lager:error(F, A),
+    io:format(F ++ "\n", A)
+end).
 
 -define(SUP_LOG_DEBUG(F), ?SUP_LOG_DEBUG(F, [])).
 -define(SUP_LOG_INFO(F), ?SUP_LOG_INFO(F, [])).
