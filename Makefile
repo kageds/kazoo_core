@@ -31,17 +31,8 @@ dialyzer:
 format:
 	$(REBAR) fmt
 
-# Build a release
-release:
-	$(REBAR) release
-
-# Run the release
-run_release:
-	_build/default/rel/$(shell basename `pwd`)/bin/$(shell basename `pwd`) start
-
-# Stop the release
-stop_release:
-	_build/default/rel/$(shell basename `pwd`)/bin/$(shell basename `pwd`) stop
+tree:
+	$(REBAR) tree
 
 # Clean, compile, and run tests in one command
 rebuild: clean compile test

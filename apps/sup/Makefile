@@ -12,4 +12,3 @@ $(ESCRIPT): src/sup.erl
 clean-escript:
 	@rm -f $(ESCRIPT)
 
-include $(ROOT)/make/kz.mk

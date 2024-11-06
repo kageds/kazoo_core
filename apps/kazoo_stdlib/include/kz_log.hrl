@@ -54,7 +54,7 @@
 -define(LOG_INFO(F, A), lager:info(F, A)).
 -define(LOG_NOTICE(F, A), lager:notice(F, A)).
 -define(LOG_WARNING(F, A), lager:warning(F, A)).
--define(LOG_DEV(F, A), dev:debug(F, A)).
+-define(LOG_DEV(F, A), lager:debug(F, A)).
 
 -define(LOG_ALERT(F), ?LOG_ALERT(F, [])).
 -define(LOG_CRITICAL(F), ?LOG_CRITICAL(F, [])).
