@@ -327,13 +327,13 @@ jwt_request(
         jwt := JWT
     } = Map
 ) ->
-    GrantType = kz_term:to_list(kz_util:uri_encode(?OAUTH_GRANT_TYPE)),
+    GrantType = kz_term:to_list(kz_http_util:urlencode(?OAUTH_GRANT_TYPE)),
     Headers = [
         {"Content-Type", "application/x-www-form-urlencoded"},
         {"User-Agent", "Kazoo"}
     ],
     Fields = [
-        {"assertion", kz_term:to_list(kz_util:uri_encode(JWT))},
+        {"assertion", kz_term:to_list(kz_http_util:urlencode(JWT))},
         {"grant_type", GrantType}
     ],
     Body = string:join(

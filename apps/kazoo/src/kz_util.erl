@@ -18,14 +18,6 @@
 ]).
 
 -export([
-    uri_encode/1,
-    uri_decode/1,
-    resolve_uri/2
-]).
-
--export([uri/2]).
-
--export([
     pretty_print_bytes/1, pretty_print_bytes/2,
     bin_usage/0,
     mem_usage/0
@@ -67,10 +59,6 @@
 -export([iolist_join/2]).
 
 -export([kz_log_md_clear/0, kz_log_md_put/2]).
-
--ifdef(TEST).
--export([resolve_uri_path/2]).
--endif.
 
 -include_lib("kernel/include/inet.hrl").
 
@@ -532,70 +520,6 @@ get_event_type(Props) when is_list(Props) ->
     {props:get_value(<<"Event-Category">>, Props), props:get_value(<<"Event-Name">>, Props)};
 get_event_type(JObj) ->
     {kz_json:get_value(<<"Event-Category">>, JObj), kz_json:get_value(<<"Event-Name">>, JObj)}.
-
--spec uri_decode(kz_term:text()) -> kz_term:text().
-uri_decode(Binary) when is_binary(Binary) ->
-    kz_term:to_binary(http_uri:decode(kz_term:to_list(Binary)));
-uri_decode(String) when is_list(String) ->
-    http_uri:decode(String);
-uri_decode(Atom) when is_atom(Atom) ->
-    kz_term:to_atom(http_uri:decode(kz_term:to_list(Atom)), 'true').
-
--spec uri_encode(kz_term:text()) -> kz_term:text().
-uri_encode(Binary) when is_binary(Binary) ->
-    kz_term:to_binary(http_uri:encode(kz_term:to_list(Binary)));
-uri_encode(String) when is_list(String) ->
-    http_uri:encode(String);
-uri_encode(Atom) when is_atom(Atom) ->
-    kz_term:to_atom(http_uri:encode(kz_term:to_list(Atom)), 'true').
-
--spec resolve_uri(
-    nonempty_string() | kz_term:ne_binary(), nonempty_string() | kz_term:api_ne_binary()
-) -> kz_term:ne_binary().
-resolve_uri(Raw, 'undefined') ->
-    kz_term:to_binary(Raw);
-resolve_uri(_Raw, <<"http", _/binary>> = Abs) ->
-    Abs;
-resolve_uri(<<_/binary>> = RawPath, <<_/binary>> = Relative) ->
-    Path = resolve_uri_path(RawPath, Relative),
-    kz_binary:join(Path, <<"/">>);
-resolve_uri(RawPath, Relative) ->
-    resolve_uri(kz_term:to_binary(RawPath), kz_term:to_binary(Relative)).
-
--spec resolve_uri_path(kz_term:ne_binary(), kz_term:ne_binary()) -> kz_term:ne_binaries().
-resolve_uri_path(RawPath, Relative) ->
-    PathTokensRev = lists:reverse(binary:split(RawPath, <<"/">>, ['global'])),
-    UrlTokens = binary:split(Relative, <<"/">>, ['global']),
-    lists:reverse(
-        lists:foldl(fun resolve_uri_fold/2, PathTokensRev, UrlTokens)
-    ).
-
--spec resolve_uri_fold(kz_term:ne_binary(), kz_term:ne_binaries()) -> kz_term:ne_binaries().
-resolve_uri_fold(<<"..">>, []) ->
-    [];
-resolve_uri_fold(<<"..">>, [_ | PathTokens]) ->
-    PathTokens;
-resolve_uri_fold(<<".">>, PathTokens) ->
-    PathTokens;
-resolve_uri_fold(<<>>, PathTokens) ->
-    PathTokens;
-resolve_uri_fold(Segment, [<<>> | DirTokens]) ->
-    [Segment | DirTokens];
-resolve_uri_fold(Segment, [LastToken | DirTokens] = PathTokens) ->
-    case filename:extension(LastToken) of
-        <<>> ->
-            %% no extension, append Segment to Tokens
-            [Segment | PathTokens];
-        _Ext ->
-            %% Extension found, append Segment to DirTokens
-            [Segment | DirTokens]
-    end.
-
--spec uri(kz_term:ne_binary(), kz_term:ne_binaries()) -> kz_term:ne_binary().
-uri(BaseUrl, Tokens) ->
-    [Pro, Url] = binary:split(BaseUrl, <<"://">>),
-    Uri = filename:join([Url | Tokens]),
-    <<Pro/binary, "://", Uri/binary>>.
 
 %%------------------------------------------------------------------------------
 %% @doc Fetch and cache the kazoo version from the VERSION file in kazoo's root folder/
