@@ -36,6 +36,7 @@
 ]).
 
 -include_lib("kazoo_stdlib/include/kz_types.hrl").
+-include_lib("kazoo_stdlib/include/kz_log.hrl").
 -include_lib("kazoo_stdlib/include/kz_databases.hrl").
 -include_lib("kazoo_documents/include/kazoo_documents.hrl").
 -include_lib("kazoo_stdlib/include/kazoo_json.hrl").
@@ -99,7 +100,9 @@ setup_extra_validator(Options) ->
     | {'error', 'not_found'}
     | kz_datamgr:data_error().
 -ifdef(TEST).
-load(Schema) -> fload(Schema).
+load(Schema) ->
+    ?LOG_DEBUG("TEST Load: ~s", [Schema]),
+    fload(<<"apps/kazoo_schemas/test/fixtures/", Schema/binary, ".json">>).
 -else.
 -spec load(kz_term:ne_binary() | string()) -> load_return().
 load(<<"./", Schema/binary>>) ->
@@ -123,6 +126,7 @@ fload(<<"./", Schema/binary>>) ->
 fload(<<"file://", Schema/binary>>) ->
     fload(Schema);
 fload(<<Schema/binary>>) ->
+    
     case filelib:is_regular(Schema) of
         'true' -> fload_file(Schema);
         'false' -> find_and_fload(Schema)
