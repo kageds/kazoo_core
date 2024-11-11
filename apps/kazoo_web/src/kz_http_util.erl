@@ -14,6 +14,7 @@
     urldecode/1, urldecode/2,
     urlencode/1, urlencode/2,
     uri/2,
+    uri_parse/1,
     resolve_uri/2,
     parse_query_string/1,
     urlsplit/1,
@@ -189,6 +190,10 @@ urlencode_plus(<<C, R/binary>>, Acc) ->
             SafeChar = encode_char(C),
             urlencode_plus(R, <<Acc/binary, "%", SafeChar/binary>>)
     end.
+
+uri_parse(URL) ->
+    #{scheme:=Scheme,host:=Host,port:=Port,path:=Path} = uri_string:parse(URL),
+    {ok, Scheme, Host, Port, Path}.
 
 %%------------------------------------------------------------------------------
 %% @doc Converts a single character to its base-16 %-encoded form.
