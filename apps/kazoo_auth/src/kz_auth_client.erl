@@ -417,7 +417,7 @@ request(Verb, URL, Body, #{token := #{authorization := Authorization}}) ->
     ],
     {'ok', {_, _, Host, _, _, _}} = kz_http_util:uri_parse(URL),
     Headers = [
-        {<<"host">>, Host},
+        {<<"host">>, maps:get('host', Host)},
         {<<"Content-Type">>, <<"application/json">>},
         {"Authorization", kz_term:to_list(Authorization)}
     ],
