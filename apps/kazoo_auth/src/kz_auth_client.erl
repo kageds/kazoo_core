@@ -415,9 +415,9 @@ request(Verb, URL, Body, #{token := #{authorization := Authorization}}) ->
         {'headers_as_is', 'true'},
         {'ssl', [{'versions', ['tlsv1.2']}]}
     ],
-    M = uri_string:parse(URL),
+    {'ok', {_, _, Host, _, _, _}} = kz_http_util:uri_parse(URL),
     Headers = [
-        {<<"host">>, maps:get('host', M)},
+        {<<"host">>, Host},
         {<<"Content-Type">>, <<"application/json">>},
         {"Authorization", kz_term:to_list(Authorization)}
     ],
