@@ -6,7 +6,7 @@ An OTP application
 Build
 -----
 
-    $ rebar3 compile
+    $ make compile
     
 BUY ME A COFFEE
 ---------------
