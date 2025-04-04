@@ -18,6 +18,11 @@ jobs:
       - checkout
 
       - run:
+          name: Install Dependencies
+          command: |
+            apt-get update && apt-get install -y netcat  # Install netcat for RabbitMQ check
+
+      - run:
           name: Wait for CouchDB and RabbitMQ
           command: |
             echo "Waiting for CouchDB..."
@@ -41,4 +46,3 @@ workflows:
   build-and-test:
     jobs:
       - build
-
