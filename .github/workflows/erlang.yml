@@ -13,7 +13,7 @@ jobs:
 
   build:
 
-    runs-on: debian-12
+    runs-on: ubuntu-latest
 
     container:
       image: erlang:24.3.4.17
@@ -23,4 +23,4 @@ jobs:
     - name: Compile
       run: make compile
     - name: Run tests
-      run: make test, ct
+      run: make test
