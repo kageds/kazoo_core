@@ -1,0 +1,36 @@
+name: Erlang CI
+
+on:
+  push:
+    branches: [ "4.4" ]
+  pull_request:
+    branches: [ "4.4" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: debian-12
+
+    container:
+      image: erlang:24.3.4.17
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile
+        run: make compile
+
+      - name: Run tests
+        run: |
+          make test
+          make ct
+
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs
+          path: _build/test/logs
+
