@@ -52,8 +52,8 @@ domains_test_() ->
 }).
 
 init() ->
-    DomainsSchema = crossbar_load(?DOMAINS_SCHEMA),
-    DomainHostsSchema = crossbar_load(?HOSTS_SCHEMA),
+    {'ok', DomainsSchema} = kz_json_schema:fload(?DOMAINS_SCHEMA),
+    {'ok', DomainHostsSchema} = kz_json_schema:fload(?HOSTS_SCHEMA),
 
     LoaderFun = fun
         A(?DOMAINS_SCHEMA) ->
@@ -71,10 +71,6 @@ init() ->
         domain_hosts = DomainHostsSchema,
         loader_fun = LoaderFun
     }.
-
-crossbar_load(Filename) ->
-    File = <<Filename/binary, ".json">>,
-    kz_json:load_fixture_from_file(crossbar, "couchdb/schemas", File).
 
 stop(_) -> 'ok'.
 

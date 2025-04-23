@@ -70,7 +70,7 @@ print_result({Mod, {unknown, What}}) ->
 
 test_module(Mod) ->
     io:format("🧪 Running ~p~n", [Mod]),
-    case catch eunit:test(Mod, [verbose, {report,{eunit_surefire,[{dir,"./_build/test/logs"}]}}]) of
+    case catch eunit:test(Mod, [{verbose, true}, {print_depth, 10}, {report,{eunit_surefire,[{dir,"./_build/test/logs"}]}}]) of
         ok ->
             {Mod, passed};
         {'EXIT', Reason} ->
@@ -84,7 +84,7 @@ maybe_start_cover(#{cover := 'true'
                    }=Opts) ->
     'ok' = filelib:ensure_dir(maps:get('report_dir', Opts, "cover") ++ "/dummy"),
     _ = cover:start(),
-    cover:compile_beam_directory("ebin");
+    cover:compile_beam_directory("test");
 maybe_start_cover(#{cover := 'true'}) ->
     io:format('user', "No project name is specified.\n", []),
     usage();
