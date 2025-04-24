@@ -3,6 +3,7 @@
 -include_lib("eunit/include/eunit.hrl").
 
 metrics_test_() ->
+    ?_test_begin(30000),
     {A, C, Z} = {<<"my_account">>, <<"my_cluster">>, <<"my_zone">>},
     %% We only care about if this crashes
     [
