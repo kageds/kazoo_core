@@ -12,11 +12,18 @@ jobs:
     working_directory: ~/project
     steps:
       - checkout
-
+      
       - run:
-          name: Install Dependencies
+          name: Install Dependencies (LibreOffice + PDF2TIFF)
           command: |
-            apt-get update && apt-get install -y netcat curl
+            apt-get update && apt-get install -y \
+              netcat \
+              curl \
+              libreoffice \
+              fonts-dejavu \
+              libtiff-tools \
+              --no-install-recommends && \
+            apt-get clean && rm -rf /var/lib/apt/lists/*
 
       - run:
           name: Wait for CouchDB and RabbitMQ
