@@ -70,15 +70,6 @@ setup() ->
 
     meck:new(kz_fixturedb_db, [unstick, passthrough]),
 
-    meck:new(kz_fax_converter, [passthrough]), 
-    meck:expect(kz_fax_converter, run_convert_command, fun
-                                                          (<<"libreoffice", _/binary>>, _FromPath, ToPath, _TmpDir) ->
-                                                                  ?LOG_DEV("mecking libreoffice convert"),
-                                                                  os:cmd("touch " ++ kz_term:to_list(ToPath)), {'ok', ToPath};
-                                                          (Command, FromPath, ToPath, TmpDir) -> 
-                                                                  meck:passthrough([Command, FromPath, ToPath, TmpDir])
-                                                       end),
-
     Pid.
 
 cleanup(Pid) ->
