@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: debian-12
+    runs-on: ubuntu-latest
 
     container:
       image: erlang:24.3.4.17
