@@ -6,6 +6,8 @@
 %%%-----------------------------------------------------------------------------
 -module(kzd_domains_tests).
 
+-include("kz_documents.hrl").
+
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("kazoo_stdlib/include/kz_databases.hrl").
 
@@ -42,8 +44,8 @@ domains_test_() ->
         fun default/1
     ]}.
 
--define(DOMAINS_SCHEMA, <<"domains">>).
--define(HOSTS_SCHEMA, <<"domain_hosts">>).
+-define(DOMAINS_SCHEMA, <<"file://domains">>).
+-define(HOSTS_SCHEMA, <<"file://domain_hosts">>).
 
 -record(state, {
     domains,
@@ -91,6 +93,7 @@ cname(#state{
     loader_fun = LoaderFun
 }) ->
     CNAME = kz_json:decode(?CNAME),
+    ?LOG_DEV("CNAME ~p", [CNAME]),
 
     Hosts = kzd_domains:cname_hosts(CNAME),
 

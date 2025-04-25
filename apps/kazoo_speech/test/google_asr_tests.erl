@@ -6,7 +6,7 @@
 %%%
 %%% @end
 %%%-----------------------------------------------------------------------------
--module(kazoo_asr_tests).
+-module(google_asr_tests).
 
 -include_lib("eunit/include/eunit.hrl").
 -include("kazoo_speech.hrl").
@@ -22,31 +22,30 @@ all_test_() ->
     ,fun setup_fixtures/0
     ,fun cleanup/1
     ,fun(_) -> [
-                {"kazoo_asr system default provider abstraction.", default_asr_provider()},
-                {"kazoo_asr system default accepted content types test.", default_asr_accept()}
+                {"kazoo_asr google provider abstraction.", google_asr_provider()}
                ]
     end
     }.
 
 setup_fixtures() ->
-    ?LOG_DEBUG(":: Setting up Kazoo Speech test"),
+    ?LOG_DEBUG(":: Setting up Google Speech test"),
+    meck:new(kapps_config, [unstick]),
     ok.
 
 cleanup(_) ->
-    ok.
+    meck:unload().
 
+
+%%------------------------------------------------------------------------------
+%%  Mock google kapps_config calls
+%%------------------------------------------------------------------------------
+config_asr_google(_, <<"asr_provider">>, _) ->
+    <<"google">>.
 
 %%------------------------------------------------------------------------------
 %% Test Cases
 %%------------------------------------------------------------------------------
-default_asr_provider() ->
-    [
-        {"Checking system default ASR provider",
-            ?_assertEqual(kazoo_asr:default_provider(), ?ASR_PROVIDER_DEFAULT)}
-    ].
+google_asr_provider() ->
+    meck:expect('kapps_config', 'get_ne_binary', fun config_asr_google/3),
+    [{"Checking google is default ASR", ?_assertEqual(kazoo_asr:default_provider(), <<"google">>)}].
 
-default_asr_accept() ->
-    [
-        {"Checking system default accepted content type",
-            ?_assertEqual(kazoo_asr:accepted_content_types(), ?ASR_ACCEPT_DEFAULT)}
-    ].
