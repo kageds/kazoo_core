@@ -30,7 +30,6 @@ jobs:
             libreoffice-calc \
             libreoffice-impress \
             libreoffice-draw \
-            libreoffice-headless \
             libtiff-tools
             
       - name: Compile
