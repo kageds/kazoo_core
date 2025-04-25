@@ -19,6 +19,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install dependencies
+        run: |
+          apt-get update
+          DEBIAN_FRONTEND=noninteractive apt-get install -y \
+            ghostscript \
+            libreoffice-common \
+            libreoffice-core \
+            libreoffice-writer \
+            libreoffice-calc \
+            libreoffice-impress \
+            libreoffice-draw \
+            libreoffice-headless \
+            libtiff-tools
+            
       - name: Compile
         run: make compile
 
@@ -33,4 +47,3 @@ jobs:
         with:
           name: test-logs
           path: _build/test/logs
-
