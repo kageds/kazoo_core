@@ -29,10 +29,14 @@ all_test_() ->
             {"Testing tiff to tiff tuple output binary", test_tiff_to_tiff_tuple_output_binary()},
             {"Tesung pdf to tiff binary output binary", test_pdf_to_tiff_binary_output_binary()},
             {"Tesing pdf to tiff tuple output binary", test_pdf_to_tiff_tuple_output_binary()},
-            {"Tesing openoffice to pdf binary output binary", test_openoffice_to_pdf_binary_output_binary()},
-            {"Testing openoffice to pdf tuple output binary", test_openoffice_to_pdf_tuple_output_binary()},
-            {"Testing openoffice to tiff binary output binary", test_openoffice_to_tiff_binary_output_binary()},
-            {"Testing openoffice to tiff tupple output binary", test_openoffice_to_tiff_tuple_output_binary()},
+            {"Tesing openoffice to pdf binary output binary",
+                test_openoffice_to_pdf_binary_output_binary()},
+            {"Testing openoffice to pdf tuple output binary",
+                test_openoffice_to_pdf_tuple_output_binary()},
+            {"Testing openoffice to tiff binary output binary",
+                test_openoffice_to_tiff_binary_output_binary()},
+            {"Testing openoffice to tiff tupple output binary",
+                test_openoffice_to_tiff_tuple_output_binary()},
             {"Testing tiff to pdf binary invalid", test_tiff_to_pdf_binary_invalid()},
             {"Testing tiff to pdf invalid", test_tiff_to_pdf_tuple_invalid()},
             {"Testing tiff to tiff binary invalid", test_tiff_to_tiff_binary_invalid()},
@@ -49,7 +53,8 @@ all_test_() ->
             {"Testing pdf to tiff to filename", test_pdf_to_tiff_to_filename()},
             {"Tesying openoffice to tiff to filename", test_openoffice_to_tiff_to_filename()},
             {"Testing tiff to tiff read metadata", test_tiff_to_tiff_read_metadata()},
-            {"Testing tiff to tiff small file read meatadata", test_tiff_to_tiff_small_file_read_metadata()},
+            {"Testing tiff to tiff small file read meatadata",
+                test_tiff_to_tiff_small_file_read_metadata()},
             {"Testing pdf to tiff read metadata", test_pdf_to_tiff_read_metadata()},
             {"Testing openoffice to tiff read metadata", test_openoffice_to_tiff_read_metadata()},
             {"Testing read metadata", test_read_metadata()}
@@ -60,10 +65,10 @@ setup() ->
     ?LOG_DEBUG(":: Setting up Kazoo Convert test"),
 
     Pid =
-    case kz_fixturedb_util:start_me() of
-        {error,{already_started,P}} ->  P;
-        P when is_pid(P) -> P
-    end,
+        case kz_fixturedb_util:start_me() of
+            {error, {already_started, P}} -> P;
+            P when is_pid(P) -> P
+        end,
 
     _ = kz_openoffice_server:start_link(),
     meck:new(kz_datamgr, [unstick, passthrough]),
@@ -753,4 +758,3 @@ test_read_metadata() ->
             kz_fax_converter:read_metadata(Src)
         )
     ].
-

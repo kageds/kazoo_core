@@ -10,22 +10,18 @@
 -include_lib("eunit/include/eunit.hrl").
 
 all_test_() ->
-    {setup
-    ,fun setup_fixtures/0
-    ,fun cleanup/1
-    ,fun(_) -> [{"Testing get prompt", get_prompt_()}
-               ]
-     end
-    }.
+    {setup, fun setup_fixtures/0, fun cleanup/1, fun(_) ->
+        [{"Testing get prompt", get_prompt_()}]
+    end}.
 
 setup_fixtures() ->
     ?LOG_DEBUG(":: Setting up Kazoo Media test"),
 
     Pid =
-    case kz_fixturedb_util:start_me() of
-        {error,{already_started,P}} ->  P;
-        P when is_pid(P) -> P
-    end,
+        case kz_fixturedb_util:start_me() of
+            {error, {already_started, P}} -> P;
+            P when is_pid(P) -> P
+        end,
 
     meck:new(kz_datamgr, [unstick, passthrough]),
 

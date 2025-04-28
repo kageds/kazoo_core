@@ -18,14 +18,11 @@
 -define(ASR_PREF_ISPEECH, <<"application/wav">>).
 
 all_test_() ->
-    {'setup'
-    ,fun setup_fixtures/0
-    ,fun cleanup/1
-    ,fun(_) -> [
-                {"kazoo_asr ispeech provider abstraction.", ispeech_asr_provider()}
-               ]
-    end
-    }.
+    {'setup', fun setup_fixtures/0, fun cleanup/1, fun(_) ->
+        [
+            {"kazoo_asr ispeech provider abstraction.", ispeech_asr_provider()}
+        ]
+    end}.
 
 setup_fixtures() ->
     ?LOG_DEBUG(":: Setting up iSpeech Speech test"),
@@ -34,7 +31,6 @@ setup_fixtures() ->
 
 cleanup(_) ->
     meck:unload().
-
 
 %%------------------------------------------------------------------------------
 %% Mock ispeech kapps_config calls

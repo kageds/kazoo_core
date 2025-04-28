@@ -15,13 +15,14 @@ oneshot_anon_test_() ->
     Fun = fun(T) -> timer:sleep(T) end,
     {'ok', Pid} = amqp_cron_task:start_link(Schedule, {Fun, [500]}),
     {_, _, TaskPid} = amqp_cron_task:status(Pid),
-    [?_assertMatch({'waiting', 500, _}, amqp_cron_task:status(Pid))
-    ,?_assertMatch('ok', timer:sleep(550))
-    ,?_assertMatch({'running', 500, _}, amqp_cron_task:status(Pid))
-    ,?_assertEqual('true', is_process_alive(TaskPid))
-    ,?_assertEqual('ok', timer:sleep(550))
-    ,?_assertMatch({'done', 500, _}, amqp_cron_task:status(Pid))
-    ,?_assertEqual('false', is_process_alive(TaskPid))
+    [
+        ?_assertMatch({'waiting', 500, _}, amqp_cron_task:status(Pid)),
+        ?_assertMatch('ok', timer:sleep(550)),
+        ?_assertMatch({'running', 500, _}, amqp_cron_task:status(Pid)),
+        ?_assertEqual('true', is_process_alive(TaskPid)),
+        ?_assertEqual('ok', timer:sleep(550)),
+        ?_assertMatch({'done', 500, _}, amqp_cron_task:status(Pid)),
+        ?_assertEqual('false', is_process_alive(TaskPid))
     ].
 
 oneshot_millis_test_() ->
@@ -133,10 +134,14 @@ invalid_range_test_() ->
 extract_integers_test_() ->
     [
         ?_assertException('error', 'function_clause', amqp_cron_task:extract_integers([], 5, 4)),
-        ?_assertException('error', {'case_clause', 'bad'}, amqp_cron_task:extract_integers(['bad'], 0, 5)),
+        ?_assertException(
+            'error', {'case_clause', 'bad'}, amqp_cron_task:extract_integers(['bad'], 0, 5)
+        ),
         ?_assertEqual([1, 2, 3, 4, 5], amqp_cron_task:extract_integers([{'range', 1, 5}], 0, 10)),
         ?_assertEqual([1, 2, 3, 4, 5], amqp_cron_task:extract_integers([{1, 5}], 0, 10)),
-        ?_assertEqual([1, 2, 3, 4, 5], amqp_cron_task:extract_integers([{'list', [1, 2, 3, 4, 5]}], 0, 10)),
+        ?_assertEqual(
+            [1, 2, 3, 4, 5], amqp_cron_task:extract_integers([{'list', [1, 2, 3, 4, 5]}], 0, 10)
+        ),
         ?_assertEqual([1, 2, 3, 4, 5], amqp_cron_task:extract_integers([[1, 2, 3, 4, 5]], 0, 10)),
         ?_assertEqual([5], amqp_cron_task:extract_integers([{'list', [5]}], 0, 10)),
         ?_assertEqual([5], amqp_cron_task:extract_integers([5], 0, 10))

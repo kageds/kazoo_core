@@ -9,12 +9,16 @@ metrics_test_() ->
         {A, C, Z} = {<<"my_account">>, <<"my_cluster">>, <<"my_zone">>},
 
         %% Ensure Graphite metrics call completes without crashing
-        ?_assertEqual(no_return,
-            kazoo_perf_maintenance:graphite_metrics(A, C, Z)),
+        ?_assertEqual(
+            no_return,
+            kazoo_perf_maintenance:graphite_metrics(A, C, Z)
+        ),
 
         %% Ensure JSON metrics call completes without crashing
-        ?_assertEqual(no_return,
-            kazoo_perf_maintenance:json_metrics()),
+        ?_assertEqual(
+            no_return,
+            kazoo_perf_maintenance:json_metrics()
+        ),
 
         ok
     end}.

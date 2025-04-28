@@ -126,7 +126,6 @@ fload(<<"./", Schema/binary>>) ->
 fload(<<"file://", Schema/binary>>) ->
     fload(Schema);
 fload(<<Schema/binary>>) ->
-    
     case filelib:is_regular(Schema) of
         'true' -> fload_file(Schema);
         'false' -> find_and_fload(Schema)

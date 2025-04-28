@@ -18,15 +18,12 @@
 -define(ASR_PREF_ISPEECH, <<"application/wav">>).
 
 all_test_() ->
-    {'setup'
-    ,fun setup_fixtures/0
-    ,fun cleanup/1
-    ,fun(_) -> [
-                {"kazoo_asr system default provider abstraction.", default_asr_provider()},
-                {"kazoo_asr system default accepted content types test.", default_asr_accept()}
-               ]
-    end
-    }.
+    {'setup', fun setup_fixtures/0, fun cleanup/1, fun(_) ->
+        [
+            {"kazoo_asr system default provider abstraction.", default_asr_provider()},
+            {"kazoo_asr system default accepted content types test.", default_asr_accept()}
+        ]
+    end}.
 
 setup_fixtures() ->
     ?LOG_DEBUG(":: Setting up Kazoo Speech test"),
@@ -34,7 +31,6 @@ setup_fixtures() ->
 
 cleanup(_) ->
     ok.
-
 
 %%------------------------------------------------------------------------------
 %% Test Cases

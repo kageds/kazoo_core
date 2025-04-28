@@ -18,14 +18,11 @@
 -define(ASR_PREF_ISPEECH, <<"application/wav">>).
 
 all_test_() ->
-    {'setup'
-    ,fun setup_fixtures/0
-    ,fun cleanup/1
-    ,fun(_) -> [
-                {"kazoo_asr google provider abstraction.", google_asr_provider()}
-               ]
-    end
-    }.
+    {'setup', fun setup_fixtures/0, fun cleanup/1, fun(_) ->
+        [
+            {"kazoo_asr google provider abstraction.", google_asr_provider()}
+        ]
+    end}.
 
 setup_fixtures() ->
     ?LOG_DEBUG(":: Setting up Google Speech test"),
@@ -34,7 +31,6 @@ setup_fixtures() ->
 
 cleanup(_) ->
     meck:unload().
-
 
 %%------------------------------------------------------------------------------
 %%  Mock google kapps_config calls
@@ -48,4 +44,3 @@ config_asr_google(_, <<"asr_provider">>, _) ->
 google_asr_provider() ->
     meck:expect('kapps_config', 'get_ne_binary', fun config_asr_google/3),
     [{"Checking google is default ASR", ?_assertEqual(kazoo_asr:default_provider(), <<"google">>)}].
-

@@ -18,32 +18,31 @@ pn_x(X, Ret) ->
     knm_number:phone_number(n_x(X, Ret)).
 
 all_test_() ->
-    {setup
-    ,fun setup_fixtures/0
-    ,fun cleanup/1
-    ,fun(_) -> [{"Testing get", get_()}
-               ,{"Testing create", create_()}
-               ,{"Testing create new", create_new_()}
-               ,{"Testing move", move_()}
-               ,{"Testing update", update_()}
-               ,{"Testing attempt setting e911 on disaallowed number", attempt_setting_e911_on_disallowed_number()}
-               ,{"Testing delete", delete_()}
-               ,{"Testing reconcile", reconcile_()}
-               ,{"Testing reserve", reserve_()}
-               ,{"Testing assign to app", assign_to_app_()}
-               ,{"Testing release", release_()}
-               ]
-     end
-    }.
+    {setup, fun setup_fixtures/0, fun cleanup/1, fun(_) ->
+        [
+            {"Testing get", get_()},
+            {"Testing create", create_()},
+            {"Testing create new", create_new_()},
+            {"Testing move", move_()},
+            {"Testing update", update_()},
+            {"Testing attempt setting e911 on disaallowed number",
+                attempt_setting_e911_on_disallowed_number()},
+            {"Testing delete", delete_()},
+            {"Testing reconcile", reconcile_()},
+            {"Testing reserve", reserve_()},
+            {"Testing assign to app", assign_to_app_()},
+            {"Testing release", release_()}
+        ]
+    end}.
 
 setup_fixtures() ->
     ?LOG_DEBUG(":: Setting up Kazoo Numbers test"),
 
-    Pid = 
-    case kz_fixturedb_util:start_me() of
-        {error,{already_started,P}} ->  P;
-        P when is_pid(P) -> P
-    end,
+    Pid =
+        case kz_fixturedb_util:start_me() of
+            {error, {already_started, P}} -> P;
+            P when is_pid(P) -> P
+        end,
 
     meck:new(kz_datamgr, [unstick, passthrough]),
 

@@ -983,7 +983,8 @@ handle_info(_Info, State) ->
 %% @doc Allows listener to pass options to handlers.
 %% @end
 %%------------------------------------------------------------------------------
--spec handle_event(kz_json:object(), kz_term:proplist(), state()) -> gen_listener:handle_event_return().
+-spec handle_event(kz_json:object(), kz_term:proplist(), state()) ->
+    gen_listener:handle_event_return().
 handle_event(JObj, _Props, #state{
     client_from = 'relay',
     client_pid = Pid
@@ -992,12 +993,12 @@ handle_event(JObj, _Props, #state{
     lager:debug("relayed event to ~p", [Pid]),
     'ignore';
 handle_event(JObj, Props, State) ->
-    #'P_basic'{correlation_id = CorrelationId } = props:get_value('basic', Props),
+    #'P_basic'{correlation_id = CorrelationId} = props:get_value('basic', Props),
     MsgId =
-    case kz_api:msg_id(JObj) of
-        'undefined' -> CorrelationId;
-        Else -> Else
-    end,
+        case kz_api:msg_id(JObj) of
+            'undefined' -> CorrelationId;
+            Else -> Else
+        end,
     case handle_payload(MsgId, JObj, State) of
         {'noreply', NewState} ->
             {'ignore', NewState};

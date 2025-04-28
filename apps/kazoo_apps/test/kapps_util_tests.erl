@@ -10,22 +10,18 @@
 -include_lib("kazoo_fixturedb/include/kz_fixturedb.hrl").
 
 all_test_() ->
-    {setup
-    ,fun setup_fixtures/0
-    ,fun cleanup/1
-    ,fun(_) -> [{"Verify the fixture provides the master account", get_master_account_id_()}
-               ]
-     end
-    }.
+    {setup, fun setup_fixtures/0, fun cleanup/1, fun(_) ->
+        [{"Verify the fixture provides the master account", get_master_account_id_()}]
+    end}.
 
 setup_fixtures() ->
     ?LOG_DEBUG(":: Setting up Kazoo Util test"),
 
     Pid =
-    case kz_fixturedb_util:start_me() of
-        {error,{already_started,P}} ->  P;
-        P when is_pid(P) -> P
-    end,
+        case kz_fixturedb_util:start_me() of
+            {error, {already_started, P}} -> P;
+            P when is_pid(P) -> P
+        end,
 
     meck:new(kz_datamgr, [unstick, passthrough]),
 

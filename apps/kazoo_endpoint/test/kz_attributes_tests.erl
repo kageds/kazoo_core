@@ -35,36 +35,33 @@
 ]).
 
 all_test_() ->
-    {setup
-    ,fun setup_fixtures/0
-    ,fun cleanup/1
-    ,fun(_) -> [
+    {setup, fun setup_fixtures/0, fun cleanup/1, fun(_) ->
+        [
             {"Testing get flags callflow", test_get_flags_callflow()},
             {"Testing get flags trunkstore", test_get_flags_trunkstore()},
             {"Testing process dynamic flags", test_process_dynamic_flags()},
             {"Testing account cid", test_account_cid()}
-               ]
-     end
-    }.
+        ]
+    end}.
 
 setup_fixtures() ->
     ?LOG_DEBUG(":: Setting up Kazoo Endpoint test"),
 
     Pid =
-    case kz_fixturedb_util:start_me() of
-        {error,{already_started,P}} ->  P;
-        P when is_pid(P) -> P
-    end,
+        case kz_fixturedb_util:start_me() of
+            {error, {already_started, P}} -> P;
+            P when is_pid(P) -> P
+        end,
 
     meck:new(kz_datamgr, [unstick, passthrough]),
-    meck:expect(kz_datamgr, open_cache_doc, fun
-           (Db, AccountId, _Options) -> kz_datamgr:open_doc(Db, AccountId)
-           end),
-%%    meck:expect(kz_datamgr, open_cache_doc, fun
-%%           (NumberDb, NormalizedNum) ->
-%%                ?LOG_DEV("mecking kz_datamgr:open_cache_doc(~p, ~p)", [NumberDb, NormalizedNum]),
-%%                kz_datamgr:open_doc(NumberDb, NormalizedNum)
-%%           end),
+    meck:expect(kz_datamgr, open_cache_doc, fun(Db, AccountId, _Options) ->
+        kz_datamgr:open_doc(Db, AccountId)
+    end),
+    %%    meck:expect(kz_datamgr, open_cache_doc, fun
+    %%           (NumberDb, NormalizedNum) ->
+    %%                ?LOG_DEV("mecking kz_datamgr:open_cache_doc(~p, ~p)", [NumberDb, NormalizedNum]),
+    %%                kz_datamgr:open_doc(NumberDb, NormalizedNum)
+    %%           end),
 
     meck:new(kz_fixturedb_db, [unstick, passthrough]),
 
@@ -171,12 +168,16 @@ create_callflow_call() ->
     kapps_call:from_route_win(RouteWin, kapps_call:from_route_req(RouteReq)).
 
 inbound_onnet_callflow_req() ->
-    {ok, RouteReq} = kz_json:fixture('kazoo_call', "fixtures/route_req/inbound-onnet-callflow.json"),
+    {ok, RouteReq} = kz_json:fixture(
+        'kazoo_call', "fixtures/route_req/inbound-onnet-callflow.json"
+    ),
     'true' = kapi_route:req_v(RouteReq),
     RouteReq.
 
 inbound_onnet_callflow_win() ->
-    {ok, RouteWin} = kz_json:fixture('kazoo_call', "fixtures/route_win/inbound-onnet-callflow.json"),
+    {ok, RouteWin} = kz_json:fixture(
+        'kazoo_call', "fixtures/route_win/inbound-onnet-callflow.json"
+    ),
     'true' = kapi_route:win_v(RouteWin),
     RouteWin.
 
@@ -186,11 +187,15 @@ create_trunkstore_call() ->
     kapps_call:from_route_win(RouteWin, kapps_call:from_route_req(RouteReq)).
 
 inbound_onnet_trunkstore_req() ->
-    {ok, RouteReq} = kz_json:fixture('kazoo_call', "fixtures/route_req/inbound-onnet-trunkstore.json"),
+    {ok, RouteReq} = kz_json:fixture(
+        'kazoo_call', "fixtures/route_req/inbound-onnet-trunkstore.json"
+    ),
     'true' = kapi_route:req_v(RouteReq),
     RouteReq.
 
 inbound_onnet_trunkstore_win() ->
-    {ok, RouteWin} = kz_json:fixture('kazoo_call', "fixtures/route_win/inbound-onnet-trunkstore.json"),
+    {ok, RouteWin} = kz_json:fixture(
+        'kazoo_call', "fixtures/route_win/inbound-onnet-trunkstore.json"
+    ),
     'true' = kapi_route:win_v(RouteWin),
     RouteWin.
