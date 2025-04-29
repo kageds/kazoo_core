@@ -4,9 +4,10 @@
   {vsn, "4.0.0"},
   {modules, []},
   {registered, [ ]},
+  {mod, {kazoo_modb_app, []}},
   {applications, [ kernel
                  , stdlib
-
+                 , pgapp
                  , kazoo_data
                  , kazoo_config
                  ]}
