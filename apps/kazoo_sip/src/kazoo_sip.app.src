@@ -6,10 +6,9 @@
   {registered, [ ]},
   {applications, [ kernel
                  , stdlib
-
+                 , nklib
                  , kazoo
                  , kazoo_number_manager
-
                  , lager
                  ]}
  ]}.
